@@ -1,0 +1,40 @@
+effect Put(n: Int): Unit
+effect Get(): Int
+effect Ask(): Int
+
+def reader(init: Int) { action: => Unit / { Put, Get } } = {
+    try {
+        println("enter reader " ++ show(init));
+        var n = action ();
+        println("leave reader " ++ show(init));
+        n
+    } with Ask { resume(init) }
+}
+
+def state(init: Int) { f: => Unit / { Put, Get } } = {
+    var s = init;
+    try { f () }
+    with Put { n => s = n; resume(()) }
+    with Get { resume(s) }
+}
+
+def counter(): Unit / { Put, Get }  = {
+    var i = do Get();
+    if (i == 0) { () } else { do Put(i - 1); counter() }
+}
+
+def main() = {
+    state(100100100){
+        () => reader(0){
+            () => reader(1){
+                () => reader(2){
+                    () => reader(3){
+                        () => reader(4){
+                            counter
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

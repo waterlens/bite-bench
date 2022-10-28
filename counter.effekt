@@ -1,0 +1,20 @@
+effect Put(n: Int): Unit
+effect Get(): Int
+
+def state(init: Int) { f: => Unit / { Put, Get } } = {
+    var s = init;
+    try { f() }
+    with Put { n => s = n; resume(()) }
+    with Get { resume(s) }
+}
+
+def counter(): Unit / { Put, Get } = {
+    var i = do Get();
+    if (i == 0) { () } else { do Put(i - 1); counter() }
+}
+
+def main() = {
+    state(100100100){
+        counter
+    }
+}
