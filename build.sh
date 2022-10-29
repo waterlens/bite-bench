@@ -11,5 +11,5 @@ function compile()
 }
 
 compile counter.effekt
-compile nqueens.effekt
+compile layered.effekt
 compile nqueens.effekt
