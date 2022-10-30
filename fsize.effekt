@@ -1,0 +1,52 @@
+effect Yield[A](elem: A): Boolean
+
+type Tree[A] {
+    Nil()
+    Node(left: Tree[A], right: Tree[A], value: A)
+}
+
+def tree_filter_iterate[A] (tr: Tree[A]) { f: A => Boolean / {} } : Unit / Yield = {
+    tr match {
+        case Nil() => ()
+        case Node(l, r, v) =>
+            if (if (f(v)) { do Yield(v) } else { true }) {
+                tree_filter_iterate(l){f};
+                tree_filter_iterate(r){f}
+            } else { () }
+    }
+}
+
+def tree_filter_size_direct[A] (tr: Tree[A]) { f: A => Boolean / {} }: Int / {} = {
+    tr match {
+        case Nil() => 0
+        case Node(l, r, v) =>
+            val ls = tree_filter_size_direct(l){f};
+            val rs = tree_filter_size_direct(r){f};
+            val cur = if (f(v)) { 1 } else { 0 };
+            ls + rs + cur
+    }
+}
+
+def tree_filter_size_indirect[A] (tr: Tree[A]) { f: A => Boolean / {} }: Int / {} = {
+    var num = 0;
+    try { tree_filter_iterate(tr){f}; num }
+    with Yield[A] { _ => num = num + 1; resume(true) }
+}
+
+def generate_tree(d: Int, n: Int) : Tree[Int] = {
+    if (d == 0) {
+        Nil()
+    } else {
+        val lt = generate_tree(d - 1, n - 1);
+        val rt = generate_tree(d - 1, n + 1);
+        Node(lt, rt, n)
+    }
+}
+
+def main() = {
+    val tree = generate_tree(10, 3);
+    val n1 = tree_filter_size_direct(tree) { n => n > 0 };
+    val n2 = tree_filter_size_indirect(tree) { n => n > 0 };
+    println(n1);
+    println(n2);
+}
