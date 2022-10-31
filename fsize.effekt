@@ -45,8 +45,12 @@ def generate_tree(d: Int, n: Int) : Tree[Int] = {
 
 def main() = {
     val tree = generate_tree(10, 3);
-    val n1 = tree_filter_size_direct(tree) { n => n > 0 };
-    val n2 = tree_filter_size_indirect(tree) { n => n > 0 };
+    val n1 = try {
+                 tree_filter_size_direct(tree) { n => do Yield(n); n > 0 }
+             } with Yield[Int] { _ => resume(true) };
+    val n2 = try {
+                 tree_filter_size_indirect(tree) { n => do Yield(n); n > 0 }
+             } with Yield[Int] { _ => resume(true) };
     println(n1);
     println(n2);
 }

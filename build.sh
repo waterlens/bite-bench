@@ -14,3 +14,4 @@ compile counter.effekt
 compile layered.effekt
 compile nqueens.effekt
 compile fsize.effekt
+compile logger.effekt
