@@ -5,7 +5,7 @@ effect Ask(): Int
 def reader(init: Int) { action: => Unit / { Put, Get } } = {
     try {
         println("enter reader " ++ show(init));
-        var n = action ();
+        val n = action ();
         println("leave reader " ++ show(init));
         n
     } with Ask { resume(init) }
@@ -19,7 +19,7 @@ def state(init: Int) { f: => Unit / { Put, Get } } = {
 }
 
 def counter(): Unit / { Put, Get }  = {
-    var i = do Get();
+    val i = do Get();
     if (i == 0) { () } else { do Put(i - 1); counter() }
 }
 

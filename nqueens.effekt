@@ -16,8 +16,8 @@ def find_solutions(n: Int, col: Int): List[Int] / { Choose, Fail } = {
     if (col == 0) {
         Nil()
     } else {
-        var sol = find_solutions(n, col - 1);
-        var queen = do Choose(n);
+        val sol = find_solutions(n, col - 1);
+        val queen = do Choose(n);
         if (safe(queen, 1, sol)) {
             Cons(queen, sol)
         } else {
