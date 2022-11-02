@@ -4,10 +4,10 @@ type mlist<h, a>
 
 effect fun replace(v: int): ()
 effect fun behead(): ()
-effect ctl yield(v: int): (() -> <console, replace, behead> ())
+effect ctl yield(v: int): (() -> <replace, behead> ())
 
 
-fun iter(l: mlist<h, int>, i: int): <console, yield, behead, read<h>, write<h>, alloc<h>, div> ()
+fun iter(l: mlist<h, int>, i: int): <yield, behead, read<h>, write<h>, alloc<h>, div> ()
   match l
     MCons(hd, tl) ->
       with fun replace(x)
@@ -15,7 +15,6 @@ fun iter(l: mlist<h, int>, i: int): <console, yield, behead, read<h>, write<h>, 
       yield(!hd)()
       if (!tl).is-mcons then
         with fun behead()
-          println("behead handled by " ++ (!hd).show)
           match !tl
             MCons(_, tl') -> tl := !tl'
             _ -> ()
@@ -37,9 +36,7 @@ fun main()
   var mls := list_to_mlist(ls)
 
   with ctl yield(x)
-    resume ({ if x < 0 then 
-                println("behead " ++ x.show)
-                behead()
+    resume ({ if x < 0 then behead()
               else replace(x * 2) })
   with fun behead()
     match mls
