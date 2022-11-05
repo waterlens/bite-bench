@@ -1,4 +1,4 @@
-effect ctl yield(elem: a): bool
+effect ctl yield(elem: a): unit
 
 type tree<a>
   Empty
@@ -25,7 +25,7 @@ fun tree_filter_size_indirect(tr: tree<a>, f: a -> bool): int
   var num := 0
   with ctl yield(_)
     num := num + 1
-    resume(True)
+    resume()
   tree_filter_iterate(tr, f)
   num
 
@@ -41,7 +41,7 @@ fun main()
   val tree = generate_tree(10, 3)
   val n1 =
     with ctl yield(_)
-      resume(True)
+      resume()
     tree_filter_size_direct(tree,
       fn (n) {
         yield(n)
@@ -49,7 +49,7 @@ fun main()
       })
   val n2 =
     with ctl yield(_)
-      resume(True)
+      resume()
     tree_filter_size_indirect(tree,
       fn (n) {
         yield(n)
