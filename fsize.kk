@@ -8,10 +8,9 @@ fun tree_filter_iterate(tr: tree<a>, f: a -> bool): yield ()
   match tr
     Empty -> ()
     Node(l, r, v) ->
-      val cont = if f(v) then yield(v) else True
-      if cont then
-        tree_filter_iterate(l, f)
-        tree_filter_iterate(r, f)
+      tree_filter_iterate(l, f)
+      tree_filter_iterate(r, f)
+      if f(v) then yield(v)
 
 fun tree_filter_size_direct(tr: tree<a>, f: a -> e bool): e int
   match tr
