@@ -9,7 +9,7 @@ struct closure_env_0_arg_1 {
     long (*f_ptr)(void*);
 };
 
-struct closure_env_0_arg_2 {
+struct closure_env_2_arg_2 {
     void **env;
     long (*f_ptr)(void*, void*);
 };
@@ -17,7 +17,7 @@ struct closure_env_0_arg_2 {
 
 long pinger(struct closure_env_0_arg_1*, long i, long n);
 
-long ponger(struct closure_env_0_arg_2*);
+long ponger(struct closure_env_2_arg_2*);
 
 long pong_handler(struct closure_env_0_arg_1* l_ping, void **env) {
     long i = (long)env[0];
@@ -25,7 +25,7 @@ long pong_handler(struct closure_env_0_arg_1* l_ping, void **env) {
     return pinger(l_ping, i+1, n);
 }
 
-long ping_handler(struct closure_env_0_arg_2* l_pong) {
+long ping_handler(struct closure_env_2_arg_2* l_pong) {
     return ponger(l_pong);
 }
 
@@ -38,12 +38,12 @@ long pinger(struct closure_env_0_arg_1* l_ping, long i, long n) {
         return 0;
     }
     void* pong_handler_env[2] = {(void*)i, (void*)n};
-    struct closure_env_0_arg_2 pong_handler_closure = {pong_handler_env, &pong_handler};
+    struct closure_env_2_arg_2 pong_handler_closure = {pong_handler_env, &pong_handler};
 
     return (long)l_ping->f_ptr(&pong_handler_closure);
 }
 
-long ponger(struct closure_env_0_arg_2* l_pong) {
+long ponger(struct closure_env_2_arg_2* l_pong) {
 #ifdef DEBUG
     printf("ponger\n");
 #endif // DEBUG
