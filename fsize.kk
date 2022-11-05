@@ -52,7 +52,7 @@ fun main()
       resume(True)
     tree_filter_size_indirect(tree,
       fn (n) {
-        /* yield(n) */
+        yield(n)
         n > 0
       })
   n1.println
